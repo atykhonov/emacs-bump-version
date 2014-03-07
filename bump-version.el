@@ -61,14 +61,17 @@
    (split-string version "\\.")))
 
 (defun bump-version--major-num (version)
-  (nth 0 (bump-version--version-to-list version)))
+  (bump-version--num version 0))
 
 (defun bump-version--minor-num (version)
-  (nth 1 (bump-version--version-to-list version)))
+  (bump-version--num version 1))
 
 (defun bump-version--patch-num (version)
-  (nth 2 (bump-version--version-to-list version)))
-  
+  (bump-version--num version 2))
+
+(defun bump-version--num (version idx)
+  (nth idx (bump-version--version-to-list version)))
+
 
 (provide 'bump-version)
 
