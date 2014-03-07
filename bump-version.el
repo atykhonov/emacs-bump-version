@@ -36,33 +36,36 @@
   (format "%s.%s.%s"
           (bump-version--major-num version)
           (bump-version--minor-num version)
-          (+ (bump-version--patch-num version) 1)))
+          (+ (bump-version--patch-num version)
+             1)))
 
 (defun bump-version--minor (version)
   (format "%s.%s.%s"
           (bump-version--major-num version)
-          (+ (bump-version--minor-num version) 1)
+          (+ (bump-version--minor-num version)
+             1)
           0))
 
 (defun bump-version--major (version)
   (format "%s.%s.%s"
-          (+ (bump-version--major-num version) 1)
+          (+ (bump-version--major-num version)
+             1)
           0 0))
 
 (defun bump-version--version-to-list (version)
-  (split-string version "\\."))
+  (mapcar
+   (lambda (n)
+     (string-to-int n))
+   (split-string version "\\.")))
 
 (defun bump-version--major-num (version)
-  (string-to-int
-   (nth 0 (bump-version--version-to-list version))))
+  (nth 0 (bump-version--version-to-list version)))
 
 (defun bump-version--minor-num (version)
-  (string-to-int
-   (nth 1 (bump-version--version-to-list version))))
+  (nth 1 (bump-version--version-to-list version)))
 
 (defun bump-version--patch-num (version)
-  (string-to-int
-   (nth 2 (bump-version--version-to-list version))))
+  (nth 2 (bump-version--version-to-list version)))
   
 
 (provide 'bump-version)
