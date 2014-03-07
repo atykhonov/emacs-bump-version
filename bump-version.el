@@ -69,3 +69,5 @@
   
 
 (provide 'bump-version)
+
+;;; bump-version.el ends here
