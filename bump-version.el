@@ -5,7 +5,7 @@
 ;; Author: Andrey Tykhonov <atykhonov@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/emacs-bump-version
-;; Version: 0.1.10
+;; Version: 0.1.14
 ;; Keywords: convenience
 
 ;; This file is NOT part of GNU Emacs.
@@ -78,12 +78,15 @@
 
 (defun bump-version-patch ()
   (interactive)
+  (bump-version-current-buffer 'bump-version--patch))
+
+(defun bump-version-current-buffer (bump-func)
   (let* ((file (buffer-file-name))
          (ext (file-name-extension file)))
     (cond ((equal ext "el")
-           (bump-version-emacs-lisp)))))
+           (bump-version-emacs-lisp bump-func)))))
 
-(defun bump-version-emacs-lisp ()
+(defun bump-version-emacs-lisp (&optional bump-func)
   (interactive)
   (save-excursion
     (with-current-buffer (current-buffer)
@@ -95,8 +98,8 @@
               (bumped-version ""))
           (end-of-line)
           (setq bumped-version
-                (bump-version--patch
-                 (buffer-substring-no-properties start (point))))
+                (funcall bump-func
+                         (buffer-substring-no-properties start (point))))
           ;; strip string
           (goto-char start)
           (kill-and-join-forward)
