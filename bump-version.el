@@ -34,6 +34,8 @@
 
 (defvar bump-version-format-string "%s.%s.%s")
 
+
+
 (defun bump-version--patch (version)
   (format bump-version-format-string
           (bump-version--major-num version)
