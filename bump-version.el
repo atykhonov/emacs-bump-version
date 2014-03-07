@@ -5,7 +5,7 @@
 ;; Author: Andrey Tykhonov <atykhonov@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/emacs-bump-version
-;; Version: 0.1.14
+;; Version: 2.0.0
 ;; Keywords: convenience
 
 ;; This file is NOT part of GNU Emacs.
@@ -79,6 +79,14 @@
 (defun bump-version-patch ()
   (interactive)
   (bump-version-current-buffer 'bump-version--patch))
+
+(defun bump-version-minor ()
+  (interactive)
+  (bump-version-current-buffer 'bump-version--minor))
+
+(defun bump-version-major ()
+  (interactive)
+  (bump-version-current-buffer 'bump-version--major))
 
 (defun bump-version-current-buffer (bump-func)
   (let* ((file (buffer-file-name))
