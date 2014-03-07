@@ -32,22 +32,24 @@
 (require 'cl)
 
 
+(defvar bump-version-format-string "%s.%s.%s")
+
 (defun bump-version--patch (version)
-  (format "%s.%s.%s"
+  (format bump-version-format-string
           (bump-version--major-num version)
           (bump-version--minor-num version)
           (+ (bump-version--patch-num version)
              1)))
 
 (defun bump-version--minor (version)
-  (format "%s.%s.%s"
+  (format bump-version-format-string
           (bump-version--major-num version)
           (+ (bump-version--minor-num version)
              1)
           0))
 
 (defun bump-version--major (version)
-  (format "%s.%s.%s"
+  (format bump-version-format-string
           (+ (bump-version--major-num version)
              1)
           0 0))
