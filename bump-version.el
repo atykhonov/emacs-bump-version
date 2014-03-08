@@ -34,8 +34,6 @@
 
 (defvar bump-version-format-string "%s.%s.%s")
 
-(defvar bump-version-emacs-lisp-version-str ";; VERSION: ")
-
 (defvar bump-version-config-file ".bump-version.el")
 
 
