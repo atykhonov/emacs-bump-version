@@ -117,32 +117,6 @@
   (let ((config (bump-version--read-config)))
     (car (cdr (assoc-string :current-version config)))))
 
-(defun bump-version-current-buffer (bump-func)
-  (let* ((file (buffer-file-name))
-         (ext (file-name-extension file)))
-    (cond ((equal ext "el")
-           (bump-version-emacs-lisp bump-func)))))
-
-(defun bump-version-emacs-lisp (&optional bump-func)
-  (interactive)
-  (save-excursion
-    (with-current-buffer (current-buffer)
-      (goto-char (point-min))
-      (when (search-forward
-             bump-version-emacs-lisp-version-str
-             nil t)
-        (let ((start (point))
-              (bumped-version ""))
-          (end-of-line)
-          (setq bumped-version
-                (funcall bump-func
-                         (buffer-substring-no-properties start (point))))
-          ;; strip string
-          (goto-char start)
-          (kill-and-join-forward)
-          (insert bumped-version)
-          (save-buffer))))))
-
 
 (provide 'bump-version)
 
