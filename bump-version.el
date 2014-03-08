@@ -36,6 +36,8 @@
 
 (defvar bump-version-emacs-lisp-version-str ";; VERSION: ")
 
+(defvar bump-version-config-file ".bump-version.el")
+
 
 
 (defun bump-version--patch (version)
@@ -103,13 +105,13 @@
 
 (defun bump-version--read-config ()
   (with-temp-buffer
-    (insert-file-contents (concat default-directory "/.bump-version.el"))
+    (insert-file-contents (concat default-directory "/" bump-version-config-file))
     (read (buffer-string))))
 
 (defun bump-version--files-to-bump ()
   (let* ((config (bump-version--read-config))
          (files (car (cdr (assoc-string :files config)))))
-    (cons ".bump-version.el" files)))
+    (cons bump-version-config-file files)))
 
 (defun bump-version--current-version ()
   (let ((config (bump-version--read-config)))
