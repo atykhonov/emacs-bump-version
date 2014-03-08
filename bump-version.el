@@ -5,7 +5,7 @@
 ;; Author: Andrey Tykhonov <atykhonov@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/emacs-bump-version
-;; Version: 0.1.2
+;; Version: 0.1.3
 ;; Keywords: convenience
 
 ;; This file is NOT part of GNU Emacs.
@@ -89,14 +89,17 @@
   (bump-version-with-config 'bump-version--major))
 
 (defun bump-version-with-config (bump-func)
-  (dolist (file (bump-version--files-to-bump))
+  (let* ((files (bump-version--files-to-bump))
+         (current-version (bump-version--current-version))
+         (next-version (funcall bump-func current-version)))
+  (dolist (file files)
     (let* ((file (concat default-directory file))
-           (current-version (bump-version--current-version))
+           (current-versiont (bump-version--current-version))
            (next-version (funcall bump-func current-version)))
       (with-temp-file file
         (insert-file-contents file)
         (while (search-forward current-version nil t)
-          (replace-match next-version nil t))))))
+          (replace-match next-version nil t)))))))
 
 (defun bump-version--read-config ()
   (with-temp-buffer
@@ -104,8 +107,9 @@
     (read (buffer-string))))
 
 (defun bump-version--files-to-bump ()
-  (let ((config (bump-version--read-config)))
-    (car (cdr (assoc-string :files config)))))
+  (let* ((config (bump-version--read-config))
+         (files (car (cdr (assoc-string :files config)))))
+    (cons ".bump-version.el" files)))
 
 (defun bump-version--current-version ()
   (let ((config (bump-version--read-config)))
