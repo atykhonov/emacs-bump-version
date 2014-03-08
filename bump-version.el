@@ -94,10 +94,10 @@
          (next-version (funcall bump-func current-version)))
   (dolist (file files)
     (setq file (concat default-directory file))
-      (with-temp-file file
-        (insert-file-contents file)
-        (while (search-forward current-version nil t)
-          (replace-match next-version nil t))))))
+    (with-temp-file file
+      (insert-file-contents file)
+      (while (search-forward current-version nil t)
+        (replace-match next-version nil t))))))
 
 (defun bump-version--read-config ()
   (with-temp-buffer
