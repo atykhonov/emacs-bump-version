@@ -5,7 +5,7 @@
 ;; Author: Andrey Tykhonov <atykhonov@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/emacs-bump-version
-;; Version: 0.2.0
+;; Version: 0.2.1
 ;; Keywords: convenience, development tools
 
 ;; This file is NOT part of GNU Emacs.
@@ -104,14 +104,16 @@
     (insert-file-contents (concat default-directory "/" bump-version-config-file))
     (read (buffer-string))))
 
+(defun bump-version--config-property (property)
+  (let ((config (bump-version--read-config)))
+    (car (cdr (assoc-string property config)))))
+
 (defun bump-version--files-to-bump ()
-  (let* ((config (bump-version--read-config))
-         (files (car (cdr (assoc-string :files config)))))
+  (let ((files (bump-version--config-property ":files")))
     (cons bump-version-config-file files)))
 
 (defun bump-version--current-version ()
-  (let ((config (bump-version--read-config)))
-    (car (cdr (assoc-string :current-version config)))))
+  (bump-version--config-property ":current-version"))
 
 
 (provide 'bump-version)
