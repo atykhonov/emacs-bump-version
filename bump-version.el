@@ -40,21 +40,21 @@
 
 (defun bump-version--patch (version)
   (format bump-version-format-string
-          (bump-version--major-num version)
-          (bump-version--minor-num version)
-          (+ (bump-version--patch-num version)
+          (bump-version--major-version version)
+          (bump-version--minor-version version)
+          (+ (bump-version--patch-level version)
              1)))
 
 (defun bump-version--minor (version)
   (format bump-version-format-string
-          (bump-version--major-num version)
-          (+ (bump-version--minor-num version)
+          (bump-version--major-version version)
+          (+ (bump-version--minor-version version)
              1)
           0))
 
 (defun bump-version--major (version)
   (format bump-version-format-string
-          (+ (bump-version--major-num version)
+          (+ (bump-version--major-version version)
              1)
           0 0))
 
@@ -64,16 +64,16 @@
      (string-to-int n))
    (split-string version "\\.")))
 
-(defun bump-version--major-num (version)
-  (bump-version--num version 0))
+(defun bump-version--major-version (version)
+  (bump-version--version version 0))
 
-(defun bump-version--minor-num (version)
-  (bump-version--num version 1))
+(defun bump-version--minor-version (version)
+  (bump-version--version version 1))
 
-(defun bump-version--patch-num (version)
-  (bump-version--num version 2))
+(defun bump-version--patch-level (version)
+  (bump-version--version version 2))
 
-(defun bump-version--num (version idx)
+(defun bump-version--version (version idx)
   (nth idx (bump-version--version-to-list version)))
 
 (defun bump-version-patch ()
