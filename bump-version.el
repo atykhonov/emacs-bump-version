@@ -35,9 +35,9 @@
 ;;
 ;; (add-to-list 'load-path "~/.emacs.d/bump-version/")
 ;; (require 'bump-version)
-;; (global-set-key "\C-c \C-b p" 'bump-version-patch)
-;; (global-set-key "\C-c \C-b i" 'bump-version-minor)
-;; (global-set-key "\C-c \C-b m" 'bump-version-major)
+;; (global-set-key (kbd "C-c C-b p") 'bump-version-patch)
+;; (global-set-key (kbd "C-c C-b i") 'bump-version-minor)
+;; (global-set-key (kbd "C-c C-b m") 'bump-version-major)
 ;;
 
 ;;; Configuration
