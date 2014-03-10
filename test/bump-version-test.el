@@ -64,16 +64,17 @@
            (bump-version--version-to-list "1.2.3"))))
 
 (ert-deftest test-bump-version--read-config ()
+  (reset-fixtures)
   (setq default-dir default-directory)
-  (with-mock
-   (stub default-directory => (concat bump-version-test/config-fixtures-path))
-   (stub bump-version-config-file => ".bump-version-1.el")
-   (should (equal
-            (bump-version--read-config)
-            '((:files
-               ("Cask"
-                "bump-version.el"))
-              (:current-version "0.2.1"))))))
+  (setq default-directory bump-version-test/fixtures-path)
+  (should (equal
+           (bump-version--read-config)
+           '((:files
+              ("Cask"
+               "emacs-lisp.el"
+               "pkg.el"))
+             (:current-version "1.6.9"))))
+  (setq default-directory default-dir))
 
 (ert-deftest test-bump-version--config-property ()
   (with-mock
@@ -83,20 +84,34 @@
             '("foo" "bar" "baz")))))
 
 (ert-deftest test-bump-version--files-to-bump ()
-  (with-mock
-   (stub default-directory => (concat bump-version-test/config-fixtures-path))
-   (stub bump-version-config-file => ".bump-version-1.el")
+  (reset-fixtures)
+  (setq default-directory bump-version-test/fixtures-path)
+  (should 
    (equal
     (bump-version--files-to-bump)
-    '((:files
-       ("Cask"
-        "bump-version.el"))
-      (:current-version "0.2.1")))))
+    '(".bump-version.el"
+      "Cask"
+      "emacs-lisp.el"
+      "pkg.el"))))
 
 (ert-deftest test-bump-version--current-version ()
-  (with-mock
-   (stub default-directory => (concat bump-version-test/config-fixtures-path))
-   (stub bump-version-config-file => ".bump-version-1.el")
+  (reset-fixtures)
+  (setq default-directory bump-version-test/fixtures-path)
+  (should
    (equal
     (bump-version--current-version)
-    "0.2.1")))
+    "1.6.9")))
+
+(ert-deftest test-bump-version-with-config ()
+  (reset-fixtures)
+  (setq default-directory (concat bump-version-test/fixtures-path "/"))
+  (setq current-version (bump-version--current-version))
+  (setq next-version (bump-version--minor current-version))
+  (bump-version-with-config 'bump-version--minor)
+  (with-temp-buffer
+    (insert-file-contents (concat default-directory "/Cask"))
+    (goto-char (point-min))
+    (search-forward next-version)))
+
+
+;;; bump-version-test.el ends here

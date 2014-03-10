@@ -12,9 +12,6 @@
 (defvar bump-version-test/fixtures-path
   (f-expand "fixtures" bump-version-test/test-path))
 
-(defvar bump-version-test/config-fixtures-path
-  (f-expand "configs" bump-version-test/fixtures-path))
-
 (defvar bump-version-test/root-path
   (f-parent bump-version-test/test-path))
 
@@ -29,6 +26,29 @@
 
 (defun load-fixture-config ()
   (with-temp-buffer
-    (insert-file-contents (concat bump-version-test/config-fixtures-path "/"
+    (insert-file-contents (concat bump-version-test/fixtures-path
+                                  "/"
                                   bump-version-config-file))
     (read (buffer-string))))
+
+(defun reset-fixtures ()
+  (copy-file (concat bump-version-test/fixtures-path
+                     "/.bump-version-draft.el")
+             (concat bump-version-test/fixtures-path
+                     "/.bump-version.el")
+             t)
+  (copy-file (concat bump-version-test/fixtures-path
+                     "/Cask-draft.el")
+             (concat bump-version-test/fixtures-path
+                     "/Cask")
+             t)
+  (copy-file (concat bump-version-test/fixtures-path
+                     "/emacs-lisp-draft.el")
+             (concat bump-version-test/fixtures-path
+                     "/emacs-lisp.el")
+             t)
+  (copy-file (concat bump-version-test/fixtures-path
+                     "/pkg-draft.el")
+             (concat bump-version-test/fixtures-path
+                     "/pkg.el")
+             t))
