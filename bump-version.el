@@ -117,6 +117,8 @@
   (interactive)
   (bump-version-with-config 'bump-version--patch))
 
+(defalias 'bump-version-release 'bump-version-minor)
+
 ;;;###autoload
 (defun bump-version-minor ()
   (interactive)
