@@ -64,12 +64,39 @@
            (bump-version--version-to-list "1.2.3"))))
 
 (ert-deftest test-bump-version--read-config ()
-  (with-temp-buffer
-    (insert-file-contents (concat default-directory "/" bump-version-config-file))
-    (read (buffer-string))))
+  (setq default-dir default-directory)
+  (with-mock
+   (stub default-directory => (concat bump-version-test/config-fixtures-path))
+   (stub bump-version-config-file => ".bump-version-1.el")
+   (should (equal
+            (bump-version--read-config)
+            '((:files
+               ("Cask"
+                "bump-version.el"))
+              (:current-version "0.2.1"))))))
 
-;; (ert-deftest test-bump-version-bump-patch-2 ()
-;;   (should (string-equal
-;;            "0.0.2"
-;;            (bump-version--patch
-;;            "0.0.1"))))
+(ert-deftest test-bump-version--config-property ()
+  (with-mock
+   (stub bump-version--read-config => '((:files ("foo" "bar" "baz"))))
+   (should (equal
+            (bump-version--config-property ":files")
+            '("foo" "bar" "baz")))))
+
+(ert-deftest test-bump-version--files-to-bump ()
+  (with-mock
+   (stub default-directory => (concat bump-version-test/config-fixtures-path))
+   (stub bump-version-config-file => ".bump-version-1.el")
+   (equal
+    (bump-version--files-to-bump)
+    '((:files
+       ("Cask"
+        "bump-version.el"))
+      (:current-version "0.2.1")))))
+
+(ert-deftest test-bump-version--current-version ()
+  (with-mock
+   (stub default-directory => (concat bump-version-test/config-fixtures-path))
+   (stub bump-version-config-file => ".bump-version-1.el")
+   (equal
+    (bump-version--current-version)
+    "0.2.1")))
