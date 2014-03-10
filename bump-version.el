@@ -112,14 +112,17 @@
 (defun bump-version--version (version idx)
   (nth idx (bump-version--version-to-list version)))
 
+;;;###autoload
 (defun bump-version-patch ()
   (interactive)
   (bump-version-with-config 'bump-version--patch))
 
+;;;###autoload
 (defun bump-version-minor ()
   (interactive)
   (bump-version-with-config 'bump-version--minor))
 
+;;;###autoload
 (defun bump-version-major ()
   (interactive)
   (bump-version-with-config 'bump-version--major))
