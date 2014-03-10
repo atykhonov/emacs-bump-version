@@ -44,7 +44,7 @@
 
 ;;
 ;; Add `.bump-version.el' file to your project root directory. For
-;; example, for `.bump-version.el' it looks like the following:
+;; example, for `bump-version' project it looks like the following:
 ;;
 ;; ((:files
 ;;   ("Cask"
