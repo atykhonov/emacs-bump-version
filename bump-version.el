@@ -132,18 +132,43 @@
 (defun bump-version-with-config (bump-func)
   (let* ((files (bump-version--files-to-bump))
          (current-version (bump-version--current-version))
-         (next-version (funcall bump-func current-version)))
+         (next-version (funcall bump-func current-version))
+         (config-base-path (bump-version--find-config-base-dir)))
   (dolist (file files)
-    (setq file (concat default-directory file))
-    (with-temp-file file
-      (insert-file-contents file)
-      (while (search-forward current-version nil t)
-        (replace-match next-version nil t))))))
+    (setq file (concat config-base-path file))
+    (if (file-exists-p file)
+        (with-temp-file file
+          (insert-file-contents file)
+          (while (search-forward current-version nil t)
+            (replace-match next-version nil t)))
+      (message "Bump version error. File %s doesn't not exist." file)))))
+
+(defun bump-version--find-config-base-dir ()
+  (let* ((directory default-directory)
+         (config-path (concat directory "/" bump-version-config-file)))
+    (when (not (file-exists-p config-path))
+      (setq config-path nil)
+      (while (and (null config-path)
+                  (not (string-equal directory "/")))
+        (setq directory
+              (file-name-directory
+               (directory-file-name directory)))
+        (setq config-path
+              (concat directory "/" bump-version-config-file))
+        (when (not (file-exists-p config-path))
+          (setq config-path nil))))
+    directory))
 
 (defun bump-version--read-config ()
-  (with-temp-buffer
-    (insert-file-contents (concat default-directory "/" bump-version-config-file))
-    (read (buffer-string))))
+  (let ((config-path (concat (bump-version--find-config-base-dir)
+                             bump-version-config-file)))
+    (when (null config-path)
+      (if (y-or-n-p "Bump version error: %s file didn't find. Find it?")
+          (setq config-path
+                (ido-find-file))))
+    (with-temp-buffer
+      (insert-file-contents config-path)
+      (read (buffer-string)))))
 
 (defun bump-version--config-property (property)
   (let ((config (bump-version--read-config)))
