@@ -113,5 +113,11 @@
     (goto-char (point-min))
     (search-forward next-version)))
 
+(ert-deftest test-bump-version--find-config-base-dir ()
+  (with-mock
+   (stub bump-version--get-default-directory =>
+         (concat bump-version-test/fixtures-path "/" "test" "/"))
+   (should (equal (bump-version--find-config-base-dir)
+                  (concat bump-version-test/fixtures-path "/")))))
 
 ;;; bump-version-test.el ends here

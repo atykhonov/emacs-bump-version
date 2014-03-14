@@ -150,8 +150,12 @@
               (replace-match next-version nil t))))
       (message "Bump version error. File %s doesn't exist." file)))))
 
+(defun bump-version--get-default-directory ()
+  "Just a little wrapper for unit tests."
+  default-directory)
+
 (defun bump-version--find-config-base-dir ()
-  (let* ((directory default-directory)
+  (let* ((directory (bump-version--get-default-directory))
          (config-path (concat directory "/" bump-version-config-file)))
     (when (not (file-exists-p config-path))
       (setq config-path nil)
