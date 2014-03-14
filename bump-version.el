@@ -141,7 +141,7 @@
           (insert-file-contents file)
           (while (search-forward current-version nil t)
             (replace-match next-version nil t)))
-      (message "Bump version error. File %s doesn't not exist." file)))))
+      (message "Bump version error. File %s doesn't exist." file)))))
 
 (defun bump-version--find-config-base-dir ()
   (let* ((directory default-directory)
