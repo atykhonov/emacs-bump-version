@@ -67,7 +67,7 @@
   (reset-fixtures)
   (with-mock
    (stub bump-version--get-default-directory =>
-         (concat bump-version-test/fixtures-path))
+         (concat bump-version-test/fixtures-path "/"))
    (should (equal
             (bump-version--read-config)
             '((:files
@@ -87,7 +87,7 @@
   (reset-fixtures)
   (with-mock
    (stub bump-version--get-default-directory =>
-         (concat bump-version-test/fixtures-path))
+         (concat bump-version-test/fixtures-path "/"))
    (should
     (equal
      (bump-version--files-to-bump)
@@ -100,7 +100,7 @@
   (reset-fixtures)
   (with-mock
    (stub bump-version--get-default-directory =>
-         (concat bump-version-test/fixtures-path))
+         (concat bump-version-test/fixtures-path "/"))
    (should
     (equal
      (bump-version--current-version)
@@ -108,13 +108,17 @@
 
 (ert-deftest test-bump-version-with-config ()
   (reset-fixtures)
-  (setq current-version (bump-version--current-version))
-  (setq next-version (bump-version--minor current-version))
-  (bump-version-with-config 'bump-version--minor)
-  (with-temp-buffer
-    (insert-file-contents (concat default-directory "/Cask"))
-    (goto-char (point-min))
-    (search-forward next-version)))
+  (with-mock
+   (stub bump-version--get-default-directory =>
+         (concat bump-version-test/fixtures-path "/"))
+   (setq current-version (bump-version--current-version))
+   (setq next-version (bump-version--minor current-version))
+   (bump-version-with-config 'bump-version--minor)
+   (with-temp-buffer
+     (insert-file-contents (concat (bump-version--get-default-directory)
+                                   "/Cask"))
+     (goto-char (point-min))
+     (search-forward next-version))))
 
 (ert-deftest test-bump-version--find-config-base-dir/child-dir ()
   (with-mock
