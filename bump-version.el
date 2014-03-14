@@ -161,6 +161,7 @@
 
 (defun bump-version--read-config ()
   (let ((config-path (concat (bump-version--find-config-base-dir)
+                             "/"
                              bump-version-config-file)))
     (when (null config-path)
       (if (y-or-n-p "Bump version error: %s file didn't find. Find it?")
