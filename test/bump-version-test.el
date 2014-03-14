@@ -65,16 +65,16 @@
 
 (ert-deftest test-bump-version--read-config ()
   (reset-fixtures)
-  (setq default-dir default-directory)
-  (setq default-directory bump-version-test/fixtures-path)
-  (should (equal
-           (bump-version--read-config)
-           '((:files
-              ("Cask"
-               "emacs-lisp.el"
-               "pkg.el"))
-             (:current-version "1.6.9"))))
-  (setq default-directory default-dir))
+  (with-mock
+   (stub bump-version--get-default-directory =>
+         (concat bump-version-test/fixtures-path))
+   (should (equal
+            (bump-version--read-config)
+            '((:files
+               ("Cask"
+                "emacs-lisp.el"
+                "pkg.el"))
+              (:current-version "1.6.9"))))))
 
 (ert-deftest test-bump-version--config-property ()
   (with-mock
@@ -85,26 +85,29 @@
 
 (ert-deftest test-bump-version--files-to-bump ()
   (reset-fixtures)
-  (setq default-directory bump-version-test/fixtures-path)
-  (should 
-   (equal
-    (bump-version--files-to-bump)
-    '(".bump-version.el"
-      "Cask"
-      "emacs-lisp.el"
-      "pkg.el"))))
+  (with-mock
+   (stub bump-version--get-default-directory =>
+         (concat bump-version-test/fixtures-path))
+   (should
+    (equal
+     (bump-version--files-to-bump)
+     '(".bump-version.el"
+       "Cask"
+       "emacs-lisp.el"
+       "pkg.el")))))
 
 (ert-deftest test-bump-version--current-version ()
   (reset-fixtures)
-  (setq default-directory bump-version-test/fixtures-path)
-  (should
-   (equal
-    (bump-version--current-version)
-    "1.6.9")))
+  (with-mock
+   (stub bump-version--get-default-directory =>
+         (concat bump-version-test/fixtures-path))
+   (should
+    (equal
+     (bump-version--current-version)
+     "1.6.9"))))
 
 (ert-deftest test-bump-version-with-config ()
   (reset-fixtures)
-  (setq default-directory (concat bump-version-test/fixtures-path "/"))
   (setq current-version (bump-version--current-version))
   (setq next-version (bump-version--minor current-version))
   (bump-version-with-config 'bump-version--minor)
@@ -113,7 +116,7 @@
     (goto-char (point-min))
     (search-forward next-version)))
 
-(ert-deftest test-bump-version--find-config-base-dir ()
+(ert-deftest test-bump-version--find-config-base-dir/child-dir ()
   (with-mock
    (stub bump-version--get-default-directory =>
          (concat bump-version-test/fixtures-path "/" "test" "/"))
