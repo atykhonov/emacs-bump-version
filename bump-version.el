@@ -5,7 +5,7 @@
 ;; Author: Andrey Tykhonov <atykhonov@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/emacs-bump-version
-;; Version: 0.2.1
+;; Version: 0.2.5
 ;; Keywords: tool
 
 ;; This file is NOT part of GNU Emacs.
@@ -137,10 +137,17 @@
   (dolist (file files)
     (setq file (concat config-base-path file))
     (if (file-exists-p file)
-        (with-temp-file file
-          (insert-file-contents file)
-          (while (search-forward current-version nil t)
-            (replace-match next-version nil t)))
+        (if (get-file-buffer file)
+            (with-current-buffer (find-file-noselect file)
+              (save-excursion
+                (goto-char (point-min))
+                (while (search-forward current-version nil t)
+                  (replace-match next-version nil t))))
+          (with-temp-file file
+            (insert-file-contents file)
+            (goto-char (point-min))
+            (while (search-forward current-version nil t)
+              (replace-match next-version nil t))))
       (message "Bump version error. File %s doesn't exist." file)))))
 
 (defun bump-version--find-config-base-dir ()
