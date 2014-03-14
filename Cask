@@ -1,6 +1,6 @@
 (source melpa)
 
-(package "bump-version" "0.2.5"
+(package "bump-version" "0.2.6"
          "Emacs package which helps bump version.")
 
 (development

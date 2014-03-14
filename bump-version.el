@@ -5,7 +5,7 @@
 ;; Author: Andrey Tykhonov <atykhonov@gmail.com>
 ;; Maintainer: Andrey Tykhonov <atykhonov@gmail.com>
 ;; URL: https://github.com/atykhonov/emacs-bump-version
-;; Version: 0.2.5
+;; Version: 0.2.6
 ;; Keywords: tool
 
 ;; This file is NOT part of GNU Emacs.
