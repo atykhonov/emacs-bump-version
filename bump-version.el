@@ -43,8 +43,12 @@
 ;;; Configuration
 
 ;;
-;; Add `.bump-version.el' file to your project root directory. For
-;; example, for `bump-version' project it looks like the following:
+;; You can create config file for your project by means of
+;; `bump-version-create-config' command. It just creates `.bump-version.el' file in
+;; the default-directory.
+;;
+;; Or you can create it manually. Add `.bump-version.el' file to your project root
+;; directory. For example, for `bump-version' project it looks like the following:
 ;;
 ;; ((:files
 ;;   ("Cask"
@@ -128,6 +132,21 @@
 (defun bump-version-major ()
   (interactive)
   (bump-version-with-config 'bump-version--major))
+
+;;;###autoload
+(defun bump-version-create-config ()
+  (interactive)
+  (let ((config-path (concat default-directory
+                             "/"
+                             bump-version-config-file)))
+    (if (file-exists-p config-path)
+        (message ".bump-version.el config already exists!")
+      (progn
+        (find-file config-path)
+        (with-current-buffer (current-buffer)
+          (insert "((:files
+  (\"bump-version.el\"))
+ (:current-version \"0.1.0\"))"))))))
 
 (defun bump-version-with-config (bump-func)
   (let* ((files (bump-version--files-to-bump))
