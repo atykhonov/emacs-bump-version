@@ -20,10 +20,10 @@ Assuming that you cloned emacs-bump-version to the
 ## Configuration
 
 You can create config file for your project by means of `bump-version-create-config`
-command. It just creates `.bump-version.el` file in the default-directory (it means
-you must be in your project root). `bump-version-create-config` command creates and
-opens `.bump-version.el` file. Just edit it (add file names in which version needs to
-be updated) and save.
+command. It just creates `.bump-version.el` file in the
+`default-directory`. `bump-version-create-config` command creates and opens
+`.bump-version.el` file. Just edit it (add file names in which project version needs
+to be updated) and save.
 
 Or you can create it manually. Add `.bump-version.el` file to your project root
 directory. For example, for `bump-version` project it looks like the following:
