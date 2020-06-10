@@ -78,6 +78,8 @@
 
 (defvar bump-version-config-file ".bump-version.el")
 
+(define-obsolete-function-alias 'string-to-int 'string-to-number "22.1")
+
 
 
 (defun bump-version--patch (version)
